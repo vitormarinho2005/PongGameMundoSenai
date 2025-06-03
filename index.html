@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pong Completo</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: white;
+      color: black;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      justify-content: center;
+      user-select: none;
+    }
+
+    body.dark {
+      background-color: #121212;
+      color: white;
+    }
+
+    #menu,
+    #fimJogo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      background-color: #222;
+      padding: 20px 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px #0005;
+      color: white;
+    }
+
+    body.dark #menu,
+    body.dark #fimJogo {
+      background-color: #333;
+    }
+
+    #menu label {
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    #menu input[type="checkbox"] {
+      margin-right: 8px;
+      cursor: pointer;
+      transform: scale(1.2);
+    }
+
+    button {
+      font-size: 18px;
+      padding: 10px 30px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      background-color: #0088ff;
+      color: white;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #005fcc;
+    }
+
+    #jogoCanvas {
+      background-color: black;
+      margin-top: 40px;
+      display: none;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #0008;
+    }
+
+    body.dark #jogoCanvas {
+      background-color: #222;
+    }
+
+    #controls {
+      margin-top: 15px;
+      display: none;
+      gap: 15px;
+    }
+
+    #controls button {
+      background-color: #ff4444;
+    }
+
+    #placar {
+      font-size: 24px;
+      margin-top: 20px;
+      display: flex;
+      gap: 40px;
+      justify-content: center;
+      width: 100%;
+      max-width: 400px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="menu">
+    <h1>Pong</h1>
+    <button id="btnIniciar">Iniciar Jogo</button>
+
+    <label><input type="checkbox" id="chkIA" /> Jogar contra IA (mais difícil)</label>
+    <label><input type="checkbox" id="chkTema" /> Tema Escuro</label>
+    <p>Controles:</p>
+    <p>Jogador 1: W (cima) / S (baixo)</p>
+    <p>Jogador 2 (multiplayer): ↑ (cima) / ↓ (baixo)</p>
+  </div>
+
+  <canvas id="jogoCanvas" width="1200" height="400"></canvas>
+
+  <div id="controls">
+    <button id="btnReiniciar">Reiniciar</button>
+  </div>
+
+  <div id="placar"></div>
+
+  <div id="fimJogo" style="display:none; flex-direction: column; align-items: center; gap: 15px;">
+    <h2 id="mensagemFim"></h2>
+    <button id="btnVoltarMenu">Voltar ao Menu</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
