@@ -4,85 +4,213 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pong Completo</title>
+  <title>Pong</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    :root {
+      --bg-dark: #111;
+      --bg-light: #f0f0f0;
+      --text-dark: #222;
+      --text-light: #fff;
+      --accent: #00ff94;
+      --btn-bg-dark: #222;
+      --btn-bg-light: #ddd;
+      --btn-text-dark: #fff;
+      --btn-text-light: #222;
     }
-  
+
     body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      flex-direction: column;
+      position: relative;
+      transition: background-color 0.5s, color 0.5s;
+    }
+
+    body.light {
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+    }
+
+    #menu {
+      position: absolute;
+      inset: 0;
+      background: var(--bg-dark);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
-      background: linear-gradient(135deg, #1f1c2c, #928dab);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: #fff;
+      z-index: 20;
+      gap: 15px;
+      transition: background 0.5s, color 0.5s;
     }
-  
-    canvas {
-      margin-top: 50px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-      background-color: #000;
+
+    body.light #menu {
+      background: var(--bg-light);
+      color: var(--text-dark);
     }
-  
-    h1, h2 {
-      margin-bottom: 20px;
+
+    #menu h1 {
+      font-size: 3rem;
+      margin: 0;
     }
-  
-    .botao {
-      margin-top: 30px;
-      padding: 12px 24px;
-      background-color: #ff5722;
-      color: white;
+
+    #menu p {
+      font-size: 1.3rem;
+      margin: 0 0 15px 0;
+    }
+
+    #menu button {
+      background-color: var(--btn-bg-dark);
+      color: var(--btn-text-dark);
       border: none;
+      padding: 10px 25px;
+      margin: 0 10px;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body.light #menu button {
+      background-color: var(--btn-bg-light);
+      color: var(--btn-text-light);
+    }
+
+    #menu button:hover {
+      background-color: #444;
+      color: white;
+    }
+
+    body.light #menu button:hover {
+      background-color: #bbb;
+      color: var(--text-dark);
+    }
+
+    canvas {
+      background-color: black;
+      border-radius: 8px;
+      box-shadow: 0 0 20px var(--accent);
+      transition: background-color 0.5s;
+    }
+
+    body.light canvas {
+      background-color: white;
+      box-shadow: 0 0 20px var(--accent);
+    }
+
+    #btnReiniciar,
+    #btnTema {
+      position: absolute;
+      top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: var(--btn-bg-dark);
+      color: var(--btn-text-dark);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      z-index: 10;
+    }
+
+    #btnReiniciar {
+      right: 20px;
+      display: none;
+    }
+
+    #btnTema {
+      left: 20px;
+    }
+
+    #btnReiniciar:hover,
+    #btnTema:hover {
+      background-color: #444;
+      color: white;
+    }
+
+    body.light #btnReiniciar,
+    body.light #btnTema {
+      background-color: var(--btn-bg-light);
+      color: var(--btn-text-light);
+    }
+
+    body.light #btnReiniciar:hover,
+    body.light #btnTema:hover {
+      background-color: #bbb;
+      color: var(--text-dark);
+    }
+
+    /* Placar */
+    #placar {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 24px;
+      letter-spacing: 3px;
+      z-index: 10;
+      user-select: none;
+      font-weight: bold;
+    }
+
+    /* Ranking */
+    #ranking {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      max-width: 600px;
+      background-color: rgba(0, 0, 0, 0.4);
+      padding: 10px 15px;
       border-radius: 8px;
       font-size: 16px;
-      cursor: pointer;
-      transition: background 0.3s ease;
+      overflow-y: auto;
+      max-height: 150px;
+      color: white;
+      user-select: none;
     }
-  
-    .botao:hover {
-      background-color: #e64a19;
+
+    body.light #ranking {
+      background-color: rgba(255, 255, 255, 0.7);
+      color: var(--text-dark);
     }
-  
-    a {
-      position: absolute;
-      bottom: 20px;
-      text-decoration: none;
-      color: #ddd;
-      font-size: 16px;
-    }
-  </style>  
+  </style>
 </head>
 
 <body>
   <div id="menu">
-    <h1>Pong</h1>
-    <button id="btnIniciar">Iniciar Jogo</button>
-
-    <label><input type="checkbox" id="chkIA" /> Jogar contra IA (mais difícil)</label>
-    <label><input type="checkbox" id="chkTema" /> Tema Escuro</label>
-    <p>Controles:</p>
-    <p>Jogador 1: W (cima) / S (baixo)</p>
-    <p>Jogador 2 (multiplayer): ↑ (cima) / ↓ (baixo)</p>
+    <h1>Pong Game</h1>
+    <p>Escolha o modo:</p>
+    <div>
+      <button id="btn1Jogador">1 Jogador</button>
+      <button id="btn2Jogadores">2 Jogadores</button>
+    </div>
   </div>
 
-  <canvas id="jogoCanvas" width="1200" height="400"></canvas>
-
-  <div id="controls">
-    <button id="btnReiniciar">Reiniciar</button>
+  <div id="submenu" style="display:none; flex-direction: column; align-items:center; gap: 10px;">
+    <p>Escolha a dificuldade:</p>
+    <div>
+      <button class="btn-dificuldade" data-dificuldade="fácil">Fácil</button>
+      <button class="btn-dificuldade" data-dificuldade="médio">Médio</button>
+      <button class="btn-dificuldade" data-dificuldade="difícil">Difícil</button>
+      <button class="btn-dificuldade" data-dificuldade="insano">Insano</button>
+    </div>
   </div>
 
   <div id="placar"></div>
+  <canvas id="jogoCanvas" width="1200" height="400"></canvas>
+  <button id="btnReiniciar">Reiniciar</button>
+  <button id="btnTema">Tema Claro</button>
 
-  <div id="fimJogo" style="display:none; flex-direction: column; align-items: center; gap: 15px;">
-    <h2 id="mensagemFim"></h2>
-    <button id="btnVoltarMenu">Voltar ao Menu</button>
+  <div id="ranking" style="display:none;">
+    <h3>Ranking - Top 5</h3>
+    <ol id="listaRanking"></ol>
   </div>
 
   <script src="script.js"></script>
