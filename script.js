@@ -1,26 +1,22 @@
 // script.js
 
-// Configurações gerais
 const canvas = document.getElementById("pong");
 const ctx = canvas.getContext("2d");
 
 const WIDTH = canvas.width;
 const HEIGHT = canvas.height;
 
-// Variáveis globais do jogo
-let gameState = "menu"; // "menu", "playing", "gameover"
-let difficulty = "medium"; // "easy", "medium", "hard"
-let theme = "light"; // "light" ou "dark"
+let gameState = "menu";
+let difficulty = "medium";
+let theme = "light";
 
 let player1Score = 0;
 let player2Score = 0;
 const maxScore = 10;
 
 let paddle1, paddle2, ball;
-
 let keys = {};
 
-// Ranking localStorage
 const RANKING_KEY = "pongRanking";
 let rawRanking = JSON.parse(localStorage.getItem(RANKING_KEY)) || [];
 let ranking = rawRanking.filter(item =>
@@ -30,24 +26,23 @@ let ranking = rawRanking.filter(item =>
   typeof item.date === "string"
 );
 
-// Elementos DOM do menu
+// Sons simples (você pode substituir pelos seus arquivos .wav na pasta sounds)
+const soundHit = new Audio("sounds/hit.wav");
+const soundScore = new Audio("sounds/score.wav");
+
 const menuEl = document.getElementById("menu");
 const gameEl = document.getElementById("game");
 const gameOverEl = document.getElementById("game-over");
-const rankingEl = document.getElementById("ranking");
+const rankingListEl = document.getElementById("ranking-list");
+const scoreEl = document.getElementById("score");
+const winnerMessageEl = document.getElementById("winner-message");
 
 const btnPlay = document.getElementById("btn-play");
 const btnRestart = document.getElementById("btn-restart");
 const btnToggleTheme = document.getElementById("btn-toggle-theme");
-
 const difficultySelect = document.getElementById("difficulty-select");
 
-const scoreEl = document.getElementById("score");
-const winnerMessageEl = document.getElementById("winner-message");
-
-const rankingListEl = document.getElementById("ranking-list");
-
-// Classes para objetos do jogo
+// Classes do jogo
 class Paddle {
   constructor(x, y, width, height, upKey, downKey, isPlayer = true) {
     this.x = x;
@@ -115,18 +110,22 @@ class Ball {
 
     if (this.y - this.radius < 0 || this.y + this.radius > HEIGHT) {
       this.speedY = -this.speedY;
+      soundHit.play();
     }
 
     if (this.collides(paddle1) || this.collides(paddle2)) {
       this.speedX = -this.speedX;
       this.speedMultiplier += 0.1;
+      soundHit.play();
     }
 
     if (this.x - this.radius < 0) {
       player2Score++;
+      soundScore.play();
       this.reset();
     } else if (this.x + this.radius > WIDTH) {
       player1Score++;
+      soundScore.play();
       this.reset();
     }
   }
@@ -148,7 +147,6 @@ class Ball {
   }
 }
 
-// Inicializa o jogo
 function initGame() {
   player1Score = 0;
   player2Score = 0;
@@ -160,12 +158,10 @@ function initGame() {
   updateScoreDisplay();
 }
 
-// Atualiza a exibição do placar
 function updateScoreDisplay() {
   scoreEl.textContent = `Jogador 1: ${player1Score} - Jogador 2: ${player2Score}`;
 }
 
-// Atualiza a lista de ranking no menu
 function updateRanking() {
   ranking.sort((a, b) => b.score - a.score);
 
@@ -190,7 +186,6 @@ function updateRanking() {
   });
 }
 
-// Salva no ranking localStorage
 function saveRanking(name, score) {
   const now = new Date();
   const entry = {
@@ -203,7 +198,6 @@ function saveRanking(name, score) {
   localStorage.setItem(RANKING_KEY, JSON.stringify(ranking));
 }
 
-// Game loop principal
 function gameLoop() {
   if (gameState !== "playing") return;
 
@@ -231,17 +225,15 @@ function gameLoop() {
     let playerName = prompt("Digite seu nome para o ranking:", "Jogador");
     if (playerName !== null && playerName.trim() !== "") {
       saveRanking(playerName.trim(), Math.max(player1Score, player2Score));
-      updateRanking();
     } else {
       saveRanking("Jogador", Math.max(player1Score, player2Score));
-      updateRanking();
     }
+    updateRanking();
   } else {
     requestAnimationFrame(gameLoop);
   }
 }
 
-// Eventos teclado
 window.addEventListener("keydown", (e) => {
   keys[e.key] = true;
 });
@@ -250,7 +242,6 @@ window.addEventListener("keyup", (e) => {
   keys[e.key] = false;
 });
 
-// Botão jogar no menu
 btnPlay.addEventListener("click", () => {
   difficulty = difficultySelect.value;
   gameState = "playing";
@@ -262,7 +253,6 @@ btnPlay.addEventListener("click", () => {
   requestAnimationFrame(gameLoop);
 });
 
-// Botão reiniciar após gameover
 btnRestart.addEventListener("click", () => {
   gameState = "menu";
   gameOverEl.style.display = "none";
@@ -270,7 +260,6 @@ btnRestart.addEventListener("click", () => {
   menuEl.style.display = "block";
 });
 
-// Alternar tema claro/escuro
 btnToggleTheme.addEventListener("click", () => {
   if (theme === "light") {
     theme = "dark";
@@ -279,12 +268,6 @@ btnToggleTheme.addEventListener("click", () => {
     theme = "light";
     document.body.classList.remove("dark-theme");
   }
-  if (gameState === "playing") {
-    paddle1.draw();
-    paddle2.draw();
-    ball.draw();
-  }
 });
 
-// Inicializa ranking ao carregar
 updateRanking();

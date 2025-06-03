@@ -1,0 +1,97 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f0f0f0;
+    color: #111;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+
+.dark-theme {
+    background-color: #121212;
+    color: #eee;
+}
+
+/* Telas */
+.menu-screen,
+.game-screen,
+.game-over-screen {
+    text-align: center;
+    width: 90vw;
+    max-width: 900px;
+}
+
+h1,
+h2 {
+    margin-bottom: 1rem;
+}
+
+#difficulty-select {
+    padding: 0.5rem;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+button {
+    padding: 0.6rem 1.2rem;
+    font-size: 1.1rem;
+    margin-top: 1rem;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #333;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #555;
+}
+
+#pong {
+    background-color: #222;
+    border: 2px solid #333;
+    display: block;
+    margin: 0 auto;
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+}
+
+.dark-theme #pong {
+    background-color: #eee;
+    border-color: #aaa;
+}
+
+.score {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+#ranking-list {
+    list-style: none;
+    margin-top: 1rem;
+    max-height: 150px;
+    overflow-y: auto;
+    padding-left: 0;
+}
+
+#ranking-list li {
+    margin-bottom: 0.3rem;
+}
+
+/* Responsividade simples */
+@media (max-width: 600px) {
+    #pong {
+        width: 100%;
+        height: auto;
+    }
+}

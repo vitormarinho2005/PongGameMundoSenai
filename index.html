@@ -3,209 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pong Clássico</title>
-  <style>
-    /* Reset básico */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    body {
-      background-color: #f0f0f0;
-      color: #222;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-      transition: background-color 0.3s, color 0.3s;
-    }
-
-    body.dark-theme {
-      background-color: #222;
-      color: #eee;
-    }
-
-    h1 {
-      margin-bottom: 20px;
-    }
-
-    /* Contêiner principal */
-    #menu, #game, #game-over {
-      width: 320px;
-      max-width: 90vw;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    #game, #game-over {
-      display: none;
-    }
-
-    /* Canvas */
-    canvas#pong {
-      background-color: white;
-      display: block;
-      margin: 0 auto 10px;
-      border: 2px solid #333;
-      border-radius: 8px;
-      max-width: 100%;
-      height: auto;
-      box-shadow: 0 0 10px rgba(0,0,0,0.15);
-      transition: background-color 0.3s, border-color 0.3s;
-    }
-
-    body.dark-theme canvas#pong {
-      background-color: #111;
-      border-color: #eee;
-      box-shadow: 0 0 15px #eee;
-    }
-
-    /* Placar */
-    #score {
-      font-weight: bold;
-      font-size: 1.2rem;
-      margin-bottom: 10px;
-    }
-
-    /* Botões */
-    button {
-      cursor: pointer;
-      background-color: #007bff;
-      border: none;
-      color: white;
-      padding: 10px 16px;
-      font-size: 1rem;
-      border-radius: 5px;
-      transition: background-color 0.3s;
-      margin-top: 10px;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    /* Select */
-    select {
-      font-size: 1rem;
-      padding: 8px 10px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      margin-bottom: 15px;
-      width: 100%;
-      max-width: 200px;
-    }
-
-    /* Ranking */
-    #ranking {
-      width: 320px;
-      max-width: 90vw;
-      margin-top: 20px;
-      text-align: center;
-    }
-
-    #ranking h2 {
-      margin-bottom: 10px;
-    }
-
-    #ranking-list {
-      list-style: none;
-      max-height: 200px;
-      overflow-y: auto;
-      padding-left: 0;
-      text-align: left;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      background: #fff;
-    }
-
-    body.dark-theme #ranking-list {
-      background: #333;
-      border-color: #555;
-    }
-
-    #ranking-list li {
-      padding: 6px 10px;
-      border-bottom: 1px solid #ddd;
-    }
-
-    body.dark-theme #ranking-list li {
-      border-color: #555;
-    }
-
-    #ranking-list li:last-child {
-      border-bottom: none;
-    }
-
-    /* Mensagem de vencedor */
-    #winner-message {
-      font-size: 1.4rem;
-      font-weight: 700;
-      margin-bottom: 15px;
-    }
-
-    /* Container para o botão tema */
-    #theme-container {
-      position: fixed;
-      top: 15px;
-      right: 15px;
-    }
-
-    /* Responsividade */
-    @media (max-width: 400px) {
-      #menu, #game, #game-over, #ranking {
-        width: 100%;
-      }
-
-      button, select {
-        font-size: 0.9rem;
-        padding: 8px 12px;
-      }
-    }
-  </style>
+  <title>Jogo Pong - Multiplayer, Ranking e Tema</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-  <div id="theme-container">
-    <button id="btn-toggle-theme" title="Alternar Tema Claro/Escuro">🌓</button>
-  </div>
-
-  <h1>Pong Clássico</h1>
-
-  <!-- Menu inicial -->
-  <section id="menu">
-    <label for="difficulty-select">Escolha a dificuldade:</label><br />
-    <select id="difficulty-select" aria-label="Selecionar dificuldade">
+  <div id="menu" class="menu-screen">
+    <h1>Pong Game</h1>
+    <label for="difficulty-select">Escolha a dificuldade:</label>
+    <select id="difficulty-select">
       <option value="easy">Fácil</option>
       <option value="medium" selected>Médio</option>
       <option value="hard">Difícil</option>
     </select>
-    <br />
-    <button id="btn-play" aria-label="Iniciar jogo">Jogar</button>
-  </section>
-
-  <!-- Área do jogo -->
-  <section id="game">
-    <canvas id="pong" width="320" height="240" aria-label="Campo do jogo Pong"></canvas>
-    <div id="score" aria-live="polite" aria-atomic="true">Jogador 1: 0 - Jogador 2: 0</div>
-  </section>
-
-  <!-- Tela de game over -->
-  <section id="game-over">
-    <div id="winner-message" role="alert"></div>
-    <button id="btn-restart" aria-label="Voltar ao menu inicial">Reiniciar</button>
-  </section>
-
-  <!-- Ranking -->
-  <section id="ranking" aria-label="Ranking dos melhores jogadores">
+    <button id="btn-play">Jogar</button>
     <h2>Ranking</h2>
-    <ul id="ranking-list" tabindex="0" aria-live="polite" aria-atomic="true">
-      <!-- Lista de jogadores vai aqui -->
-    </ul>
-  </section>
+    <ul id="ranking-list"></ul>
+  </div>
+
+  <div id="game" class="game-screen" style="display:none;">
+    <canvas id="pong" width="800" height="500"></canvas>
+    <div id="score" class="score"></div>
+    <button id="btn-toggle-theme">Alternar Tema</button>
+  </div>
+
+  <div id="game-over" class="game-over-screen" style="display:none;">
+    <h2 id="winner-message"></h2>
+    <button id="btn-restart">Voltar ao Menu</button>
+  </div>
 
   <script src="script.js"></script>
 </body>
