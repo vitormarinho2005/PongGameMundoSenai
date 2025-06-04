@@ -26,10 +26,6 @@ let ranking = rawRanking.filter(item =>
   typeof item.date === "string"
 );
 
-// Sons simples (você pode substituir pelos seus arquivos .wav na pasta sounds)
-const soundHit = new Audio("sounds/hit.wav");
-const soundScore = new Audio("sounds/score.wav");
-
 const menuEl = document.getElementById("menu");
 const gameEl = document.getElementById("game");
 const gameOverEl = document.getElementById("game-over");
@@ -110,22 +106,18 @@ class Ball {
 
     if (this.y - this.radius < 0 || this.y + this.radius > HEIGHT) {
       this.speedY = -this.speedY;
-      soundHit.play();
     }
 
     if (this.collides(paddle1) || this.collides(paddle2)) {
       this.speedX = -this.speedX;
       this.speedMultiplier += 0.1;
-      soundHit.play();
     }
 
     if (this.x - this.radius < 0) {
       player2Score++;
-      soundScore.play();
       this.reset();
     } else if (this.x + this.radius > WIDTH) {
       player1Score++;
-      soundScore.play();
       this.reset();
     }
   }
