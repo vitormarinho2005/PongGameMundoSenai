@@ -58,7 +58,7 @@ button:hover {
 }
 
 #pong {
-    background-color: #222;
+    background-color: #fff;
     border: 2px solid #333;
     display: block;
     margin: 0 auto;
@@ -67,7 +67,7 @@ button:hover {
 }
 
 .dark-theme #pong {
-    background-color: #eee;
+    background-color: black;
     border-color: #aaa;
 }
 
